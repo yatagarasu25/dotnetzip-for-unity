@@ -1,10 +1,7 @@
-# dotnetzip #
-This is a git mirror of DotNetZip, a ZIP file handling library for .NET and
-Mono.
-
-You can reach DotNetZip's website at 
+# dotnetzip-for-unity #
+This is a stripped-down version of DotNetZip (no BZip2/GZip support for now) with some fixes so it can be used on Unity projects, including those that target Android and iOS.
 
 This project is licensed under the Ms-PL, packaged within this project as
 "License.txt".
 
--Ed Ropple <ed+dotnetzip@edropple.com>
+Thanks to Ed Ropple <ed+dotnetzip@edropple.com> for the original GitHub mirror of DotNetZip.

@@ -471,11 +471,11 @@ namespace Ionic.Zip
             while (j + 3 < extra.Length)
             {
                 UInt16 headerId = (UInt16)(extra[j++] + extra[j++] * 256);
-                if (headerId == targetHeaderId) return j-2;
+                if (headerId == targetHeaderId) return j - 2;
 
                 // else advance to next segment
                 Int16 dataSize = (short)(extra[j++] + extra[j++] * 256);
-                j+= dataSize;
+                j += dataSize;
             }
 
             return -1;
@@ -644,7 +644,8 @@ namespace Ionic.Zip
                                                          dataSize, posn));
             int remainingData = dataSize;
 
-            var slurp = new Func<Int64>( () => {
+#if !NO_LINQ
+			var slurp = new Func<Int64>( () => {
                     if (remainingData < 8)
                         throw new BadReadException(String.Format("  Missing data for ZIP64 extra field, position 0x{0:X16}", posn));
                     var x = BitConverter.ToInt64(buffer, j);
@@ -653,14 +654,19 @@ namespace Ionic.Zip
                     return x;
                 });
 
-            if (this._UncompressedSize == 0xFFFFFFFF)
+
+			if (this._UncompressedSize == 0xFFFFFFFF) {
                 this._UncompressedSize = slurp();
+			}
 
-            if (this._CompressedSize == 0xFFFFFFFF)
+			if (this._CompressedSize == 0xFFFFFFFF) {
                 this._CompressedSize = slurp();
+			}
 
-            if (this._RelativeOffsetOfLocalHeader == 0xFFFFFFFF)
+            if (this._RelativeOffsetOfLocalHeader == 0xFFFFFFFF) {
                 this._RelativeOffsetOfLocalHeader = slurp();
+			}
+#endif
 
             // Ignore anything else. Potentially there are 4 more bytes for the
             // disk start number.  DotNetZip currently doesn't handle multi-disk
@@ -700,7 +706,8 @@ namespace Ionic.Zip
 
             int remainingData = dataSize;
 
-            var slurp = new Func<DateTime>( () => {
+#if !NO_LINQ
+			var slurp = new Func<DateTime>( () => {
                     Int32 timet = BitConverter.ToInt32(buffer, j);
                     j += 4;
                     remainingData -= 4;
@@ -729,6 +736,8 @@ namespace Ionic.Zip
             }
             else
                 ReadExtraField(); // will recurse
+
+#endif
 
             return j;
         }

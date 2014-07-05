@@ -3210,7 +3210,9 @@ namespace Ionic.Zip
                 }
                 StringComparison sc = (CaseSensitiveRetrieval) ? StringComparison.Ordinal : StringComparison.OrdinalIgnoreCase;
 
+#if !NO_LINQ
                 coll.Sort((x, y) => { return String.Compare(x.FileName, y.FileName, sc); });
+#endif
                 return coll.AsReadOnly();
             }
         }
@@ -3633,9 +3635,14 @@ namespace Ionic.Zip
         private Int64 _OffsetOfCentralDirectory64;
         private Nullable<bool> _OutputUsesZip64;
         internal bool _inExtractAll;
-        private System.Text.Encoding _alternateEncoding = System.Text.Encoding.GetEncoding("IBM437"); // UTF-8
         private ZipOption _alternateEncodingUsage = ZipOption.Never;
+#if SILVERLIGHT
+        private static System.Text.Encoding _defaultEncoding = System.Text.Encoding.UTF8;
+        private System.Text.Encoding _alternateEncoding = System.Text.Encoding.UTF8;
+#else
         private static System.Text.Encoding _defaultEncoding = System.Text.Encoding.GetEncoding("IBM437");
+        private System.Text.Encoding _alternateEncoding = System.Text.Encoding.GetEncoding("IBM437"); // UTF-8
+#endif
 
         private int _BufferSize = BufferSizeDefault;
 

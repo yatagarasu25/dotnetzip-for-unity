@@ -1021,7 +1021,11 @@ namespace Ionic.Zip
         {
             get
             {
+#if SILVERLIGHT
+                return System.Text.Encoding.UTF8;
+#else
                 return System.Text.Encoding.GetEncoding("IBM437");
+#endif
             }
         }
 
@@ -1614,8 +1618,11 @@ namespace Ionic.Zip
         private Dictionary<String, ZipEntry> _entriesWritten;
         private int _entryCount;
         private ZipOption _alternateEncodingUsage = ZipOption.Never;
-        private System.Text.Encoding _alternateEncoding
-            = System.Text.Encoding.GetEncoding("IBM437"); // default = IBM437
+#if SILVERLIGHT
+        private System.Text.Encoding _alternateEncoding = System.Text.Encoding.UTF8;
+#else
+        private System.Text.Encoding _alternateEncoding = System.Text.Encoding.GetEncoding("IBM437"); // default = IBM437
+#endif
 
         private bool _leaveUnderlyingStreamOpen;
         private bool _disposed;

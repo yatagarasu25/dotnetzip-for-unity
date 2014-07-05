@@ -55,7 +55,9 @@ using System.ComponentModel;
 using System.Text.RegularExpressions;
 using System.Collections.Generic;
 #if SILVERLIGHT
+#if !NO_LINQ
 using System.Linq;
+#endif
 #endif
 
 namespace Ionic
@@ -102,7 +104,8 @@ namespace Ionic
     {
         internal virtual bool Verbose
         {
-            get;set;
+            get;
+            set;
         }
         internal abstract bool Evaluate(string filename);
 
@@ -321,7 +324,7 @@ namespace Ionic
             set
             {
                 if (value.Length != 1 ||
-                    (value[0]!='D' && value[0]!='F'))
+                    (value[0] != 'D' && value[0] != 'F'))
                     throw new ArgumentException("Specify a single character: either D or F");
                 ObjectType = value[0];
             }
@@ -618,7 +621,7 @@ namespace Ionic
         ///
         /// <param name="selectionCriteria">The criteria for file selection.</param>
         public FileSelector(String selectionCriteria)
-        : this(selectionCriteria, true)
+            : this(selectionCriteria, true)
         {
         }
 
@@ -856,7 +859,8 @@ namespace Ionic
         /// </summary>
         public bool TraverseReparsePoints
         {
-            get; set;
+            get;
+            set;
         }
 
 
@@ -959,7 +963,7 @@ namespace Ionic
 
             string interim = source;
 
-            for (int i=0; i < prPairs.Length; i++)
+            for (int i = 0; i < prPairs.Length; i++)
             {
                 //char caseIdx = (char)('A' + i);
                 string pattern = RegexAssertions.PrecededByEvenNumberOfSingleQuotes +
@@ -1096,7 +1100,7 @@ namespace Ionic
                                 }
                             }
                         }
-                        t= DateTime.SpecifyKind(t, DateTimeKind.Local).ToUniversalTime();
+                        t = DateTime.SpecifyKind(t, DateTimeKind.Local).ToUniversalTime();
                         current = new TimeCriterion
                         {
                             Which = (WhichTime)Enum.Parse(typeof(WhichTime), tokens[i], true),
@@ -1191,7 +1195,7 @@ namespace Ionic
                                 throw new ArgumentException(String.Join(" ", tokens, i, tokens.Length - i));
 
 #if SILVERLIGHT
-                            current = (SelectionCriterion) new TypeCriterion
+                            current = (SelectionCriterion)new TypeCriterion
                                     {
                                         AttributeString = tokens[i + 2],
                                         Operator = c
@@ -1259,7 +1263,7 @@ namespace Ionic
         /// selection criteria for this instance. </returns>
         public override String ToString()
         {
-            return "FileSelector("+_Criterion.ToString()+")";
+            return "FileSelector(" + _Criterion.ToString() + ")";
         }
 
 
@@ -1360,7 +1364,7 @@ namespace Ionic
 #if !SILVERLIGHT
                                 || ((File.GetAttributes(dir) & FileAttributes.ReparsePoint) == 0)
 #endif
-                                )
+)
                             {
                                 // workitem 10191
                                 if (Evaluate(dir)) list.Add(dir);
@@ -1424,16 +1428,25 @@ namespace Ionic
 
 
 #if SILVERLIGHT
-       public static System.Enum[] GetEnumValues(Type type)
+        public static System.Enum[] GetEnumValues(Type type)
         {
             if (!type.IsEnum)
                 throw new ArgumentException("not an enum");
 
+#if !NO_LINQ
             return (
               from field in type.GetFields(BindingFlags.Public | BindingFlags.Static)
               where field.IsLiteral
               select (System.Enum)field.GetValue(null)
             ).ToArray();
+#else
+            List<System.Enum> ls = new List<Enum>();
+            foreach (var field in type.GetFields(BindingFlags.Public | BindingFlags.Static))
+            {
+                if (field.IsLiteral) ls.Add((System.Enum)field.GetValue(null));
+            }
+            return ls.ToArray();
+#endif
         }
 
         public static string[] GetEnumStrings<T>()
@@ -1442,11 +1455,20 @@ namespace Ionic
             if (!type.IsEnum)
                 throw new ArgumentException("not an enum");
 
+#if !NO_LINQ
             return (
               from field in type.GetFields(BindingFlags.Public | BindingFlags.Static)
               where field.IsLiteral
               select field.Name
             ).ToArray();
+#else
+            List<string> ls = new List<string>();
+            foreach (var field in type.GetFields(BindingFlags.Public | BindingFlags.Static))
+            {
+                if (field.IsLiteral) ls.Add(field.Name);
+            }
+            return ls.ToArray();
+#endif
         }
 #endif
 

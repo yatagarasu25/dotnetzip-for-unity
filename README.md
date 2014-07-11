@@ -5,3 +5,8 @@ This project is licensed under the Ms-PL, packaged within this project as
 "License.txt".
 
 Thanks to Ed Ropple <ed+dotnetzip@edropple.com> for the original GitHub mirror of DotNetZip.
+
+## How to use ##
+Clone the repository and compile the project, or download the already compiled libraries from the _Binaries_ folder. Drop them in your Unity project's _Assets/Plugins_ folder and you are good to go.
+
+The library has been extensively tested in Android devices, however, some issues can arise when targetting iOS devices. Feel free to report any bugs you find.

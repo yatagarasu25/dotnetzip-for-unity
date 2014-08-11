@@ -928,10 +928,14 @@ namespace Ionic.Zip
             lock(_outputLock)
             {
                 int tid = System.Threading.Thread.CurrentThread.GetHashCode();
+#if !(NETCF || SILVERLIGHT)
                 Console.ForegroundColor = (ConsoleColor) (tid % 8 + 8);
+#endif
                 Console.Write("{0:000} WZACS ", tid);
                 Console.WriteLine(format, varParams);
+#if !(NETCF || SILVERLIGHT)
                 Console.ResetColor();
+#endif
             }
         }
 

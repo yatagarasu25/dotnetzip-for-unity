@@ -45,7 +45,7 @@
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
     <OutputPath>bin\Debug\</OutputPath>
-    <DefineConstants>TRACE;DEBUG;AESCRYPTO;BZIP;SILVERLIGHT;NO_LINQ</DefineConstants>
+    <DefineConstants>TRACE;DEBUG;AESCRYPTO;BZIP;SILVERLIGHT;NO_LINQ;NO_SFX</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <DocumentationFile>bin\Debug\Ionic.Zip.Unity.XML</DocumentationFile>
@@ -55,7 +55,7 @@
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>bin\Release\</OutputPath>
-    <DefineConstants>TRACE;AESCRYPTO;BZIP;SILVERLIGHT;NO_LINQ</DefineConstants>
+    <DefineConstants>TRACE;AESCRYPTO;BZIP;SILVERLIGHT;NO_LINQ;NO_SFX</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
